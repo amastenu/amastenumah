@@ -1,11 +1,88 @@
-// HOME PAGE CONTENT
-// Edit the text values below to update the home page
+/**
+ * Home page (/) — developer brief `content/home.js`.
+ * `fallbackImage` is required by page spec §1 (not repeated in brief snippet).
+ * `bio` photo keys are required by page spec §4 (brief snippet shows paragraphs only).
+ */
 
 export const home = {
   hero: {
-    videoFile: '/videos/hero-reel.mp4',
-    headline: 'CUSTOMER SERVICE ISN\'T BROKEN.',
-    subheadline: 'IT\'S WORKING EXACTLY AS DESIGNED.',
-    subtext: 'The question is: designed for whom?',
+    videoFile: "/videos/hero-reel.mp4",
+    fallbackImage: "/images/hero-fallback.jpg",
+    headline: "CUSTOMER SERVICE ISN'T BROKEN.",
+    subheadline: "IT'S WORKING EXACTLY AS DESIGNED.",
+    subtext: "The question is: designed for whom?",
+  },
+
+  accessibility: {
+    heroVideoLabel: "Hero reel",
+    scrollToIndictmentLabel: "Scroll to content",
+  },
+
+  indictment: {
+    /**
+     * Each entry: plain string OR { before, accent, after? } — accent renders in brand-red.
+     */
+    lines: [
+      "Your CFO isn't sabotaging your customer service.",
+      { before: "He's optimizing it — ", accent: "for the wrong outcome", after: "" },
+      "And he has 30 years of data telling him he's right.",
+    ],
+    redLine: "This is the insight every customer service consultant is afraid to say.",
+  },
+
+  /* Logos: flat files under /public/images/ — paths must match these filenames */
+  mediaLogos: [
+    { name: "NPR", file: "/images/npr-logo.webp" },
+    { name: "NBC News", file: "/images/nbc-logo.webp" },
+    { name: "Fox", file: "/images/fox.webp" },
+    { name: "Fox Business", file: "/images/fox-business-logo.webp" },
+  ],
+
+  statBar: "25 years inside the machine. 4 books. One thesis.",
+
+  testimonialsHeading: "Testimonials",
+
+  bio: {
+    eyebrow: "The case",
+    paragraphs: [
+      "I started as a service worker. Became a service executive. I've lived the incentives, the scorecards, and the scripts — and I've seen what they optimize for.",
+      "Today I speak and write so leaders can see the machine clearly — and change what they measure before it changes them.",
+    ],
+    photoFile: "/images/amas-about-sch-pic.webp",
+    photoWidth: 560,
+    photoHeight: 640,
+    photoAlt: "Amas Tenumah",
+  },
+
+  keynote: {
+    title: "The Keynote",
+    subtitle: "Designed to Fail: The True Economics of Customer Service",
+    description:
+      "A high-impact program for leaders who are tired of cosmetic fixes. Truth, story, and next-week actions your audience can use.",
+    cta: { label: "Book This Talk", href: "/talk" },
+  },
+
+  testimonials: [
+    {
+      quote:
+        "An inspiring speaker and hands-on consultant, Amas Tenumah knows how to empower and engage his audience. He brings a refreshing point of view to the table at every engagement. Highly recommended!",
+      name: "Scott Robins",
+      title: "Partner, Heidrick & Struggles",
+    },
+    {
+      quote: "Amas' presentation really changed our trajectory, our ROI was 10X",
+      name: "Jason Trout",
+      title: "CEO, BoldRamp",
+    },
+    {
+      quote: "He shows up to events with crazy ideas that challenge us to think in new and creative ways.",
+      name: "David Hadabos",
+      title: "CEO, CCNG",
+    },
+  ],
+
+  finalCta: {
+    label: "Let's Talk",
+    href: "/talk",
   },
 };

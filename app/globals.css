@@ -1,0 +1,29 @@
+/* Brief: single Tailwind entry. Base + components + utilities are required for Tailwind v3 to emit utilities. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Hero entrance animations: keep copy visible when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-up-slow,
+  .animate-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .animate-float-soft {
+    animation: none !important;
+  }
+  .animate-bounce {
+    animation: none !important;
+  }
+  .animate-hero-kenburns,
+  .animate-hero-shell,
+  .animate-scroll-hint {
+    animation: none !important;
+  }
+  .animate-hero-shell {
+    opacity: 1 !important;
+  }
+}
