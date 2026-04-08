@@ -2,6 +2,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { Bebas_Neue, Crimson_Text, Montserrat } from "next/font/google";
 import Footer from "../components/Footer";
 import Nav from "../components/Nav";
+import PageTransitions from "../components/PageTransitions";
 import { site } from "../content/global";
 import "./globals.css";
 
@@ -41,7 +42,7 @@ export default function RootLayout({ children }) {
     <html lang="en-US" className={fontVars}>
       <body className={`${crimsonText.className} min-h-screen bg-brand-dark antialiased`}>
         <Nav />
-        {children}
+        <PageTransitions>{children}</PageTransitions>
         <Footer />
         <Analytics />
       </body>

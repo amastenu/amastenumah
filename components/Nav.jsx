@@ -33,8 +33,8 @@ export default function Nav() {
   const linkClass = (href) => {
     const active = pathname === href || pathname.startsWith(`${href}/`);
     return [
-      "font-ui text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-400 ease-premium",
-      active ? "text-brand-red" : "text-brand-charcoal hover:text-brand-red",
+      "group relative inline-flex font-ui text-[13px] font-semibold uppercase tracking-[0.08em] transition-all duration-400 ease-premium after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-brand-red after:transition-transform after:duration-400 after:ease-premium hover:after:scale-x-100",
+      active ? "text-brand-red after:scale-x-100" : "text-brand-charcoal hover:text-brand-red",
     ].join(" ");
   };
 
@@ -54,13 +54,13 @@ export default function Nav() {
       >
         {site.accessibility.skipToContent}
       </a>
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-8 px-6 py-5">
         <Link href="/" className="shrink-0">
           <Image
             width={site.logo.width}
             height={site.logo.height}
             src={site.logo.src}
-            className="h-10 w-auto transition-transform duration-400 ease-premium md:h-12"
+            className="h-11 w-auto transition-transform duration-400 ease-premium hover:scale-[1.02] md:h-[3.2rem]"
             alt={site.logo.alt}
             sizes="160px"
             fetchPriority="high"

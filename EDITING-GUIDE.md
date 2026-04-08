@@ -1,129 +1,154 @@
-# EDITING-GUIDE.md — amastenumah.com
+# EDITING GUIDE - amastenumah.com
 
-This site is built so you can describe changes in plain English to an AI (e.g. Claude). **All copy lives in `content/`** as plain JavaScript objects. Do not edit marketing text inside `components/` unless you are changing layout or behavior.
+This guide is for non-developers. You can update this website by asking an AI to edit the right files, then pushing to GitHub.
 
-## Required folder structure (developer brief)
+## 1) Quick rules (most important)
 
-Your GitHub/Vercel project root may be named `amas-next` or `amastenumah`; **inside** the repo, paths match the brief:
+- Put all text/content changes in `content/` files.
+- Put image files in `public/images/`.
+- Put video files in `public/videos/`.
+- Do not hardcode marketing copy inside `components/` unless you are intentionally changing layout/behavior.
 
-- `app/page.jsx`, `app/work/page.jsx`, `app/hold/page.jsx`, `app/talk/page.jsx`
-- `app/api/contact/route.js`, `app/layout.jsx`, `app/globals.css`
-- `components/` — `Nav.jsx`, `Footer.jsx`, `VideoHero.jsx`, `MediaLogos.jsx`, `VideoCard.jsx`, `TestimonialCard.jsx`, `ContactForm.jsx`, `SectionWrapper.jsx`
-- `content/` — `home.js`, `work.js`, `hold.js`, `talk.js`, `global.js`
-- `public/images/` (flat — no subfolders; all raster/SVG image assets), `public/videos/` (flat — all `.mp4` etc.), `public/og-image.jpg` at repo `public/` root
-- `EDITING-GUIDE.md`, `tailwind.config.js`, `next.config.js`, `package.json`
+If you are unsure, tell AI:  
+"Only edit content files unless I explicitly ask for layout changes."
 
-**Also present (not on the brief diagram):** `postcss.config.js` — required so Next.js can process Tailwind.
+## 2) Where to edit what
 
-## Files to know
+| File | Controls |
+|---|---|
+| `content/global.js` | Site name, nav, social links, footer labels, site-wide metadata |
+| `content/home.js` | Home page hero, indictment, logos, bio, keynote, testimonials |
+| `content/work.js` | Work page media appearances, video library, conference/speeches content |
+| `content/hold.js` | HOLD page copy, buy links, pull quotes |
+| `content/talk.js` | Let's Talk page copy and form labels |
+| `app/api/contact/route.js` | Contact form email sending logic (Resend) |
 
-| File | What it controls |
-|------|------------------|
-| `content/global.js` | Site name, tagline, nav, logo paths, footer, accessibility labels, **site-wide SEO** (`site.metadata`) |
-| `content/home.js` | Home page: hero, indictment, `mediaLogos`, `statBar`, `testimonialsHeading`, bio (`eyebrow`, `paragraphs`, photo paths), keynote, testimonials, `finalCta`, hero accessibility strings |
-| `content/work.js` | Work page: `seo`, section titles, filter labels, appearances, videos |
-| `content/hold.js` | HOLD book page: `seo`, headline, subheadline, cover, description, thesis, buy links, pull quotes |
-| `content/talk.js` | Let's Talk: `seo`, headline, subheadline, `formFields`, `submissionEmail`, success/error strings |
+## 3) Run locally (preview before publishing)
 
-## Media paths
+Prerequisites:
+- Node.js 18+ installed
+- Git installed
 
-- **Hero video:** `public/videos/hero-reel.mp4` (see `content/home.js` → `hero.videoFile`).
-- **Hero fallback image:** `public/images/hero-fallback.jpg` (or change path in `content/home.js`).
-- **Media logos (home + work):** flat files under `public/images/` (e.g. `npr-logo.webp`, `nbc-logo.webp`, `fox.webp`, `fox-business-logo.webp`). Paths must match `content/home.js` and `content/work.js`.
-- **Social share image:** `public/og-image.jpg` (1200×630 recommended) — referenced in `content/global.js` → `site.metadata`. Replace with a designed asset for best previews on LinkedIn / X.
+Commands (from project root):
 
----
+```bash
+npm install
+npm run dev
+```
 
-## Indictment lines (accent phrases)
+Open: [http://localhost:3000](http://localhost:3000)
 
-In `content/home.js`, `indictment.lines` is an array. Each item is either:
+Optional production check:
 
-- A **plain string** (one line of copy), or
-- An object `{ before, accent, after? }` — `before` and `after` are normal text; **`accent`** is shown in **brand red** between them. Use `after` only when you need text after the red phrase; omit it or use `""` when not needed.
+```bash
+npm run build
+```
 
-The closing line under the stack is `indictment.redLine` (punchline-style line).
+## 4) Publish changes (live site)
 
----
+1. Save your file changes
+2. Commit to Git
+3. Push to `main`
+4. Vercel auto-deploys in about 1 minute
 
-## Updating the home page headline
+Verify:
+- Open live site
+- Hard refresh (`Ctrl+F5`)
+- Confirm updated text/images/links
 
-The headline lives in `content/home.js` under `hero.headline`.
+## 5) Environment variables (required for contact form)
 
-**Example prompt to Claude:**
+In Vercel Project Settings -> Environment Variables:
 
-> Change the hero headline in `content/home.js` to: YOUR NEW HEADLINE HERE
+- `RESEND_API_KEY` = your Resend API key
 
-Claude should edit only that string. Commit and push to `main`; Vercel deploys automatically.
+If contact form stops emailing, check this first.
 
----
+## 6) Asset replacement rules
 
-## Adding a media appearance (The Work page)
+### Images
+- Place files in `public/images/`
+- Recommended: compressed webp/png/jpg
+- Keep filenames clean and final before referencing in content files
 
-Appearances live in `content/work.js` in the `appearances` array. Each item has `outlet`, `date`, `title`, `description`, `link`, and `logo` (path under `public/`).
+### Videos
+- Place files in `public/videos/`
+- Hero video path in `content/home.js` -> `hero.videoFile`
+- Keep hero fallback image path in `content/home.js` -> `hero.fallbackImage`
 
-**Example prompt:**
+### Social sharing image
+- File: `public/og-image.jpg` (recommended 1200x630)
+- Metadata lives in `content/global.js` -> `site.metadata`
 
-> Add a new entry to `appearances` in `content/work.js` for a Forbes piece titled "…" dated March 2026, linking to https://…, using logo file `/images/forbes.png` (place `forbes.png` in `public/images/`).
+## 7) Copy-paste AI prompt templates
 
----
+### Update home hero headline
+> In `content/home.js`, change `home.hero.headline` to: "CUSTOMER SERVICE IS DESIGN, NOT ACCIDENT."
 
-## Adding a video to The Work page
+### Update home subheadline/subtext
+> In `content/home.js`, update `home.hero.subheadline` and `home.hero.subtext` with my new copy. Do not edit component files.
 
-Videos live in `content/work.js` in the `videos` array. Each needs `title`, `description`, `youtubeId`, and `category` (`keynote` | `media` | `panel`).
+### Add a media logo on home page
+> Add a new entry to `home.mediaLogos` in `content/home.js` with `name`, `file`, and `href`. Keep existing order.
 
-**Example prompt:**
+### Update THE CONFESSION copy
+> Replace all strings inside `home.bio.paragraphs` in `content/home.js` with this exact text and keep paragraph breaks.
 
-> Add a video to `content/work.js` with youtubeId `dQw4w9WgXcQ`, category `keynote`, title "…", description "…".
+### Add work media appearance
+> Add a new object to `work.appearances` in `content/work.js` with outlet, date, title, description, link, and logo path.
 
----
+### Add YouTube video to Work page
+> Add a new object to `work.videos` in `content/work.js` with title, description, youtubeId, and category (`keynote`, `media`, or `panel`).
 
-## Updating bio copy
+### Update conference gallery tags
+> In `content/work.js`, update the `tag` values in `work.stageStills` for these image paths: [...]
 
-Bio paragraphs are in `content/home.js` under `bio.paragraphs` (an array of strings). The bio photo path and alt text are `bio.photoFile`, `bio.photoAlt`, etc.
+### Update HOLD page
+> In `content/hold.js`, update `headline`, `description`, and `buyLinks` using this copy/links. Keep structure unchanged.
 
-**Example prompt:**
+### Update Let's Talk form labels
+> In `content/talk.js`, update `formFields` placeholders and submit label. Do not modify API route.
 
-> Replace the second paragraph in `bio.paragraphs` in `content/home.js` with: [paste text].
+### Update social links
+> In `content/global.js`, replace `site.social` URLs with these exact links.
 
----
+## 8) Troubleshooting
 
-## Changing a button label or CTA
+### "I changed text but don't see it live"
+- Check you pushed to `main`
+- Wait for Vercel deploy to finish
+- Hard refresh browser (`Ctrl+F5`)
 
-- Home keynote button: `content/home.js` → `keynote.cta.label` and `keynote.cta.href`.
-- Final home CTA: `content/home.js` → `finalCta`.
-- Talk form submit: `content/talk.js` → `formFields.submitLabel`.
-- Event type dropdown: `content/talk.js` → `formFields.eventTypePlaceholder` and `formFields.eventTypeLabel`.
+### "Build failed on Vercel"
+- Ask AI:  
+  "Read the build error and fix only the failing file. Keep content in content files."
 
-**Example prompt:**
+### "Image not showing"
+- Confirm file exists in `public/images/`
+- Confirm path starts with `/images/...`
+- Check capitalization and spaces in filename
 
-> Set `finalCta.label` in `content/home.js` to "Email Amas" and `finalCta.href` to `mailto:amas@amastenumah.com`.
+### "Video not playing"
+- Confirm file exists in `public/videos/`
+- Confirm `hero.videoFile` path in `content/home.js`
+- Keep fallback image configured
 
----
+### "Contact form not sending"
+- Confirm `RESEND_API_KEY` is set in Vercel
+- Check Resend domain verification status
 
-## Updating the book page (HOLD)
+## 9) Safe editing checklist before push
 
-Edit `content/hold.js`: `headline`, `subheadline`, `description`, `thesis`, `buyLinks`, `pullQuotes`, `coverImage`, `coverAlt`.
+- [ ] I only changed intended files
+- [ ] New paths in content match actual files in `public/`
+- [ ] No accidental copy hardcoded in components
+- [ ] Site loads locally (`npm run dev`)
+- [ ] Optional: build passes (`npm run build`)
 
-**Example prompt:**
+## 10) Advanced note (when to edit components)
 
-> Add a Barnes & Noble URL to `buyLinks` in `content/hold.js` and update the first pull quote to: "…"
+Edit `components/` only for visual/behavior changes (animation, layout, interactivity).  
+Edit `content/` for copy, links, labels, and media references.
 
----
-
-## Site-wide SEO (title, description, Open Graph)
-
-Edit `content/global.js` → `site.metadata` (same fields as the developer brief’s `app/layout.jsx` example: `title`, `description`, `openGraph`, `twitter`).
-
----
-
-## Contact form email (Resend)
-
-Set `RESEND_API_KEY` in Vercel project environment variables. The handler matches the brief: `from` `site@amastenumah.com`, `to` `amas@amastenumah.com`, subject and body template as documented. `talk.submissionEmail` documents the inbox for the owner; the API `to` address follows the brief.
-
----
-
-## After editing
-
-1. Save the file(s).
-2. Run `npm run build` locally if you want to verify.
-3. Commit and push to GitHub `main` — Vercel rebuilds the site.
+When in doubt, ask AI:
+> "Implement this using content-driven architecture. Put all editable text in `content/*`."

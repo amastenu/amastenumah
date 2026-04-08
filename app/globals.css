@@ -3,11 +3,32 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
+.noise-layer {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.08;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.42) 1px, transparent 0),
+    radial-gradient(circle at 3px 3px, rgba(255, 255, 255, 0.2) 1px, transparent 0);
+  background-size: 4px 4px, 7px 7px;
+}
+
 /* Hero entrance animations: keep copy visible when user prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .animate-fade-up,
   .animate-fade-up-slow,
-  .animate-fade-in {
+  .animate-fade-in,
+  .animate-word-reveal,
+  .animate-headline-line-rise {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;
@@ -20,7 +41,11 @@
   }
   .animate-hero-kenburns,
   .animate-hero-shell,
-  .animate-scroll-hint {
+  .animate-scroll-hint,
+  .animate-scroll-bounce-soft,
+  .animate-red-flicker,
+  .animate-logo-marquee,
+  .animate-logo-fade-scale {
     animation: none !important;
   }
   .animate-hero-shell {

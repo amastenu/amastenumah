@@ -27,15 +27,27 @@ export const home = {
       { before: "He's optimizing it — ", accent: "for the wrong outcome", after: "" },
       "And he has 30 years of data telling him he's right.",
     ],
+    highlightWords: ["CFO", "customer service", "30 years of data", "wrong outcome"],
     redLine: "This is the insight every customer service consultant is afraid to say.",
   },
 
   /* Logos: flat files under /public/images/ — paths must match these filenames */
   mediaLogos: [
-    { name: "NPR", file: "/images/npr-logo.webp" },
-    { name: "NBC News", file: "/images/nbc-logo.webp" },
-    { name: "Fox", file: "/images/fox.webp" },
-    { name: "Fox Business", file: "/images/fox-business-logo.webp" },
+    { name: "CBC", file: "/images/cbc-logo.svg", href: "https://www.youtube.com/watch?v=CGrdMdCD18w" },
+    { name: "NPR", file: "/images/npr-logo.webp", href: "https://www.npr.org/2023/03/15/1163733421/why-customer-service-ratings-are-getting-worse" },
+    {
+      name: "NBC News",
+      file: "/images/nbc-logo.webp",
+      href: "https://www.nbcnews.com/nightly-news/video/consumer-frustration-grows-as-customer-service-becomes-more-automated-193128517587",
+    },
+    {
+      name: "The Atlantic",
+      file: "/images/The-Atlantic.png",
+      href: "https://www.theatlantic.com/ideas/archive/2025/06/customer-service-sludge/683340/?gift=izJy9NoJOvuZ18zh7vlZDYDAzI9opU7tSxLTLYn2ntk&utm_source=copy-link&utm_medium=social&utm_campaign=share",
+    },
+    { name: "Fox", file: "/images/fox.webp", href: "https://www.fox5dc.com/video/fmc-2023mgu745sdu9ts" },
+    { name: "Fox Business", file: "/images/fox-business-logo.webp", href: "https://www.foxbusiness.com/lifestyle/fast-food-dining-rooms-thing-of-the-past" },
+    { name: "Next Avenue", file: "/images/next-avenue-logo.webp", href: "https://www.nextavenue.org/refund-runaround/" },
   ],
 
   statBar: "25 years inside the machine. 4 books. One thesis.",
@@ -43,10 +55,13 @@ export const home = {
   testimonialsHeading: "Testimonials",
 
   bio: {
-    eyebrow: "The case",
+    eyebrow: "THE CONFESSION",
     paragraphs: [
-      "I started as a service worker. Became a service executive. I've lived the incentives, the scorecards, and the scripts — and I've seen what they optimize for.",
-      "Today I speak and write so leaders can see the machine clearly — and change what they measure before it changes them.",
+      "I started as a service worker. Became a service executive. Then a consultant hired by the companies I used to criticize.",
+      "I built the phone systems designed to keep you from talking to a human. I know what the brief said. It wasn't \"help the customer.\" It was \"reduce handle time.\"",
+      "I've spent 25 years watching this industry lie to itself. Four books. Hundreds of stages. Dozens of countries. And one conclusion that hasn't changed:",
+      "Bad customer service is not an accident. It's a business model.",
+      "My name is Amas Tenumah. I'm the person you call when you're ready to stop pretending.",
     ],
     photoFile: "/images/amas-about-sch-pic.webp",
     photoWidth: 560,
