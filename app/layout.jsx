@@ -40,6 +40,9 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en-US" className={fontVars}>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" type="image/x-icon" />
+      </head>
       <body className={`${crimsonText.className} min-h-screen bg-brand-dark antialiased`}>
         <Nav />
         <PageTransitions>
