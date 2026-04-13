@@ -42,8 +42,10 @@ export default function RootLayout({ children }) {
     <html lang="en-US" className={fontVars}>
       <body className={`${crimsonText.className} min-h-screen bg-brand-dark antialiased`}>
         <Nav />
-        <PageTransitions>{children}</PageTransitions>
-        <Footer />
+        <PageTransitions>
+          {children}
+          <Footer />
+        </PageTransitions>
         <Analytics />
       </body>
     </html>

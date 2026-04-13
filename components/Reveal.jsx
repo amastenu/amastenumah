@@ -32,8 +32,8 @@ export default function Reveal({ children, className = "", delayMs = 0 }) {
   return (
     <div
       ref={ref}
-      className={`transform-gpu will-change-transform transition-all duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-[30px] opacity-0"
+      className={`transform-gpu will-change-transform transition-[opacity,transform] duration-[700ms] ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        visible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
       } ${className}`}
       style={{ transitionDelay: visible ? `${delayMs}ms` : "0ms" }}
     >

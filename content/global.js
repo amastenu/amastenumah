@@ -14,6 +14,13 @@ export const site = {
     instagram: "https://www.instagram.com/amastenumah/",
     tiktok: "https://www.tiktok.com/@amastenumah0",
   },
+  /** Shown under each platform name in the footer (The Work and every page). */
+  socialHandles: {
+    linkedin: "/in/amastenumah",
+    x: "@amastenumah",
+    instagram: "@amastenumah",
+    tiktok: "@amastenumah0",
+  },
   nav: [
     { label: "The Work", href: "/work" },
     { label: "HOLD", href: "/hold" },
@@ -29,7 +36,7 @@ export const site = {
   },
 
   metadata: {
-    title: "Amas Tenumah — Customer Service Authority",
+    title: "Amas Tenumah",
     description:
       "Customer service isn't broken. It's working exactly as designed. Amas Tenumah is the keynote speaker and author who explains why.",
     openGraph: {

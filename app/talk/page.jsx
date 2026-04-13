@@ -86,7 +86,7 @@ export default function Page() {
           </div>
         </Reveal>
         <Reveal delayMs={320}>
-          <div className="mt-14 rounded-xl border border-white/20 bg-white/[0.97] p-6 shadow-[0_30px_58px_-28px_rgba(0,0,0,0.75)] backdrop-blur-sm md:p-10">
+          <div className="mt-14 rounded-[14px] border border-white/[0.1] bg-[#1a1a1a]/85 p-6 shadow-[0_28px_64px_-28px_rgba(0,0,0,0.85)] backdrop-blur-md md:p-10">
             <ContactForm />
           </div>
         </Reveal>

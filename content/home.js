@@ -6,8 +6,22 @@
 
 export const home = {
   hero: {
+    /** Background loop — H.264 MP4 at `public/videos/hero-reel.mp4` → `/videos/hero-reel.mp4` (`VideoHero`). */
     videoFile: "/videos/hero-reel.mp4",
-    fallbackImage: "/images/hero-fallback.jpg",
+    /**
+     * Optional smaller MP4 for narrow viewports (≤768px), e.g. 720p / ~1.5 Mbps — big win vs one 6MB file for phones.
+     * Export from the same edit: HandBrake “Web” preset, RF ~24–28, max 1280px wide.
+     */
+    videoFileNarrow: undefined,
+    /**
+     * Optional WebM (VP9) — often 25–40% smaller than MP4 at similar quality. Listed before MP4 where used.
+     * Omit on iOS-only testing; Safari falls back to MP4.
+     */
+    videoFileWebm: undefined,
+    /** `<video poster>` + still shown until frames decode. */
+    posterImage: "/images/Amas still on stage 2013.png",
+    /** If `videoFile` fails to load. */
+    fallbackImage: "/images/Amas still on stage 2013.png",
     headline: "CUSTOMER SERVICE ISN'T BROKEN.",
     subheadline: "IT'S WORKING EXACTLY AS DESIGNED.",
     subtext: "The question is: designed for whom?",
@@ -80,19 +94,20 @@ export const home = {
   testimonials: [
     {
       quote:
-        "An inspiring speaker and hands-on consultant, Amas Tenumah knows how to empower and engage his audience. He brings a refreshing point of view to the table at every engagement. Highly recommended!",
-      name: "Scott Robins",
-      title: "Partner, Heidrick & Struggles",
+        "We could not have had a successful launch for our patients and our employees without Amas. Saved us six figures.",
+      name: "Ginny Spielman",
+      title: "Prospero Health",
     },
     {
-      quote: "Amas' presentation really changed our trajectory, our ROI was 10X",
+      quote:
+        "They give us insights no one else has. We now understand how our customers think and feel — and more importantly, we can go execute.",
+      name: "Sean Kane",
+      title: "The Honest Company",
+    },
+    {
+      quote: "Amas\u2019 presentation really changed our trajectory. Our ROI was 10X.",
       name: "Jason Trout",
       title: "CEO, BoldRamp",
-    },
-    {
-      quote: "He shows up to events with crazy ideas that challenge us to think in new and creative ways.",
-      name: "David Hadabos",
-      title: "CEO, CCNG",
     },
   ],
 

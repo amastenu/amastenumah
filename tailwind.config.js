@@ -52,6 +52,36 @@ module.exports = {
           from: { transform: "scale(1)" },
           to: { transform: "scale(1.1)" },
         },
+        /** Hero background: slow breathing scale (GPU-friendly). */
+        "hero-bg-drift": {
+          from: { transform: "scale(1)" },
+          to: { transform: "scale(1.05)" },
+        },
+        /** One-shot, very subtle load glitch on headline copy. */
+        "hero-headline-glitch": {
+          "0%": {
+            textShadow:
+              "0.5px 0 0 rgba(255, 59, 59, 0.22), -0.5px 0 0 rgba(120, 200, 255, 0.12), 0 2px 20px rgba(0,0,0,0.6)",
+            transform: "translateX(0)",
+          },
+          "12%": {
+            textShadow:
+              "-0.5px 0 0 rgba(255, 59, 59, 0.18), 0.5px 0 0 rgba(120, 200, 255, 0.1), 0 2px 20px rgba(0,0,0,0.6)",
+            transform: "translateX(-0.4px)",
+          },
+          "24%": {
+            textShadow: "0 2px 20px rgba(0,0,0,0.6)",
+            transform: "translateX(0.25px)",
+          },
+          "100%": {
+            textShadow: "0 2px 20px rgba(0,0,0,0.6)",
+            transform: "translateX(0)",
+          },
+        },
+        "play-pulse-soft": {
+          "0%, 100%": { transform: "scale(1)", opacity: "1" },
+          "50%": { transform: "scale(1.04)", opacity: "0.95" },
+        },
         "hero-shell": {
           from: { opacity: "0" },
           to: { opacity: "1" },
@@ -66,8 +96,8 @@ module.exports = {
         },
         "red-flicker": {
           "0%, 100%": { opacity: "1" },
-          "25%": { opacity: "0.92" },
-          "60%": { opacity: "0.98" },
+          "45%": { opacity: "0.985" },
+          "72%": { opacity: "0.995" },
         },
         "logo-marquee": {
           from: { transform: "translateX(0)" },
@@ -86,10 +116,13 @@ module.exports = {
         "fade-in": "fade-in 0.6s ease-out forwards",
         "float-soft": "float-soft 2.8s ease-in-out infinite",
         "hero-kenburns": "hero-kenburns 24s linear infinite alternate",
+        "hero-bg-drift": "hero-bg-drift 14s ease-in-out infinite alternate",
+        "hero-headline-glitch": "hero-headline-glitch 0.85s ease-out forwards",
+        "play-pulse-soft": "play-pulse-soft 2.8s ease-in-out infinite",
         "hero-shell": "hero-shell 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards",
         "scroll-hint": "scroll-hint 2.4s ease-in-out infinite",
         "scroll-bounce-soft": "scroll-bounce-soft 1.8s ease-in-out infinite",
-        "red-flicker": "red-flicker 3.6s ease-in-out infinite",
+        "red-flicker": "red-flicker 6.5s ease-in-out infinite",
         "logo-marquee": "logo-marquee 30s linear infinite",
         "logo-fade-scale": "logo-fade-scale 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards",
       },

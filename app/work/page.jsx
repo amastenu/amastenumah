@@ -1,9 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
+import MediaAppearanceCard from "../../components/MediaAppearanceCard";
 import Reveal from "../../components/Reveal";
 import StageGallery from "../../components/StageGallery";
 import VideoCard from "../../components/VideoCard";
+import { site } from "../../content/global";
 import { work } from "../../content/work";
+
+const SOCIAL_ORDER = ["linkedin", "x", "instagram", "tiktok"];
 
 const FILTER_IDS = Object.keys(work.filters);
 
@@ -48,37 +51,24 @@ export default function Page({ searchParams }) {
         <Reveal>
           <h2 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08] uppercase tracking-wide text-white">{work.sectionAppearancesTitle}</h2>
         </Reveal>
-        <ul className="mt-12 space-y-9">
+        <ul className="mt-12 grid list-none grid-cols-1 gap-7 p-0 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
           {work.appearances.map((a, i) => (
-            <Reveal key={a.link} delayMs={i * 90}>
-              <li className="group flex flex-col gap-5 rounded-xl border border-white/15 border-l-2 border-l-brand-red/75 bg-gradient-to-br from-brand-charcoal/95 via-brand-charcoal/90 to-brand-red/10 p-7 shadow-[0_14px_30px_-18px_rgba(0,0,0,0.52)] transition-all duration-300 ease-premium hover:scale-[1.02] hover:border-brand-red/45 hover:border-l-brand-red hover:shadow-[0_18px_36px_-20px_rgba(211,47,47,0.16),0_18px_34px_-18px_rgba(0,0,0,0.62)] md:flex-row md:items-center md:gap-9 md:p-8">
-                <div className="flex h-20 w-36 shrink-0 items-center justify-center rounded-lg bg-white/5 p-3 ring-1 ring-white/10">
-                  <Image
-                    src={a.logo}
-                    alt={a.outlet}
-                    width={120}
-                    height={48}
-                    className="max-h-11 w-auto object-contain opacity-90 transition-opacity duration-300 ease-premium group-hover:opacity-100"
-                    unoptimized
-                    style={{ maxWidth: "100%" }}
-                  />
-                </div>
-                <div className="min-w-0 flex-1 text-left">
-                  <p className="font-ui text-xs font-bold uppercase tracking-[0.18em] text-brand-red">{a.date}</p>
-                  <h3 className="mt-2 font-display text-[1.6rem] uppercase leading-[1.05] tracking-wide text-white">{a.title}</h3>
-                  <p className="mt-3 font-body text-[17px] leading-relaxed text-white">{a.description}</p>
-                  <a
-                    href={a.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/link relative mt-4 inline-flex items-center gap-1 font-ui text-sm font-semibold text-brand-red transition-colors duration-300 ease-premium after:absolute after:-bottom-1 after:left-0 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-brand-red/80 after:transition-transform after:duration-300 after:ease-premium hover:text-white hover:after:scale-x-100"
-                  >
-                    <span>{work.viewLinkLabel.replace("→", "").trim()}</span>
-                    <span className="transition-transform duration-300 ease-premium group-hover/link:translate-x-1">→</span>
-                  </a>
-                </div>
-              </li>
-            </Reveal>
+            <li key={a.link} className="flex min-w-0">
+              <Reveal delayMs={i * 70} className="h-full w-full">
+                <MediaAppearanceCard
+                  outlet={a.outlet}
+                  date={a.date}
+                  title={a.title}
+                  description={a.description}
+                  cardBlurb={a.cardBlurb}
+                  emphasis={a.emphasis ?? []}
+                  link={a.link}
+                  logo={a.logo}
+                  viewLinkLabel={work.viewLinkLabel}
+                  postDescriptionQuote={a.postDescriptionQuote}
+                />
+              </Reveal>
+            </li>
           ))}
         </ul>
       </div>
@@ -88,24 +78,28 @@ export default function Page({ searchParams }) {
           <h2 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08] uppercase tracking-wide text-white">{work.sectionVideosTitle}</h2>
         </Reveal>
         <Reveal delayMs={80}>
-          <div className="mt-8 -mx-1 flex flex-wrap gap-3 px-1 py-2">
-          {FILTER_IDS.map((id) => (
-            <Link
-              key={id}
-              href={id === "all" ? "/work" : `/work?category=${id}`}
-              scroll={false}
-              className={`rounded-full border px-5 py-2.5 font-ui text-[12px] font-bold uppercase tracking-[0.14em] shadow-[0_8px_20px_-14px_rgba(0,0,0,0.55)] transition-all duration-200 ease-premium active:scale-[0.98] ${
-                category === id
-                  ? "border-brand-red-dark bg-brand-red-dark text-white shadow-[0_10px_24px_-12px_rgba(183,28,28,0.55)] hover:scale-105 hover:bg-brand-red hover:shadow-[0_14px_30px_-14px_rgba(211,47,47,0.5)]"
-                  : "border-white/20 bg-brand-charcoal/80 text-brand-light hover:scale-105 hover:border-white/30 hover:bg-white/10 hover:shadow-[0_10px_24px_-14px_rgba(211,47,47,0.2),0_10px_24px_-14px_rgba(0,0,0,0.6)]"
-              }`}
-            >
-              {work.filters[id]}
-            </Link>
-          ))}
+          <div className="mt-10 flex flex-wrap gap-3 md:mt-12 md:gap-4">
+            {FILTER_IDS.map((id) => {
+              const active = category === id;
+              return (
+                <Link
+                  key={id}
+                  href={id === "all" ? "/work" : `/work?category=${id}`}
+                  scroll={false}
+                  aria-current={active ? "page" : undefined}
+                  className={`rounded-full border px-6 py-3 font-ui text-[12px] font-bold uppercase tracking-[0.14em] transition-all duration-200 ease-premium active:scale-[0.98] ${
+                    active
+                      ? "border-brand-red bg-brand-red-dark text-white shadow-[0_0_0_2px_rgba(26,26,26,1),0_0_0_4px_rgba(211,47,47,0.45),0_12px_28px_-10px_rgba(183,28,28,0.55)] hover:border-brand-red hover:bg-brand-red"
+                      : "border-white/18 bg-brand-charcoal/70 text-brand-light/95 shadow-[0_8px_20px_-14px_rgba(0,0,0,0.5)] hover:border-white/28 hover:bg-white/[0.08] hover:text-white"
+                  }`}
+                >
+                  {work.filters[id]}
+                </Link>
+              );
+            })}
           </div>
         </Reveal>
-        <div className="mt-12 grid gap-9 md:grid-cols-2">
+        <div className="mt-16 grid grid-cols-1 gap-12 md:mt-20 md:grid-cols-2 md:gap-x-12 md:gap-y-14">
           {videos.length === 0 ? (
             <Reveal>
               <p className="font-body text-brand-light/70">{work.emptyCategoryMessage}</p>
@@ -113,46 +107,89 @@ export default function Page({ searchParams }) {
           ) : (
             videos.map((v, i) => (
               <Reveal
-                key={v.title + v.youtubeId + v.category}
+                key={`${v.title}-${v.youtubeId ?? v.externalUrl ?? "x"}-${v.category}`}
                 delayMs={i * 80}
-                className={videos.length % 2 === 1 && i === videos.length - 1 ? "md:col-span-2 md:mx-auto md:w-full md:max-w-[34rem]" : ""}
+                className={`flex min-h-0 min-w-0 ${i === 0 ? "md:col-span-2" : ""}`}
               >
-                <VideoCard title={v.title} description={v.description} youtubeId={v.youtubeId} />
+                <div className="w-full">
+                  <VideoCard
+                    title={v.title}
+                    description={v.description}
+                    youtubeId={v.youtubeId}
+                    externalUrl={v.externalUrl}
+                    thumbnailSrc={v.thumbnailSrc}
+                    category={v.category}
+                    featured={i === 0}
+                  />
+                </div>
               </Reveal>
             ))
           )}
         </div>
       </div>
 
-      <div id="conference-speeches" className="mx-auto mt-24 max-w-[1140px] px-5 md:px-8">
-        <Reveal>
-          <h2 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08] uppercase tracking-wide text-white">{work.sectionConferenceTitle}</h2>
-        </Reveal>
-        <Reveal delayMs={80}>
-          <p className="mt-6 max-w-[760px] font-body text-[18px] leading-[1.8] text-white md:text-[20px]">{work.sectionConferenceIntro}</p>
-        </Reveal>
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {work.conferenceVideos.map((item, i) => (
-            <Reveal key={item.link} delayMs={120 + i * 80}>
+      <div id="the-stages" className="relative mx-auto mt-28 max-w-[1140px] px-5 md:mt-32 md:px-8">
+        <div
+          className="pointer-events-none absolute inset-0 -mx-4 rounded-[14px] bg-gradient-to-b from-brand-red/[0.06] via-transparent to-black/20 md:-mx-8"
+          aria-hidden
+        />
+        <div className="section-noise-soft pointer-events-none absolute inset-0 -mx-4 rounded-[14px] opacity-40 md:-mx-8" aria-hidden />
+        <div className="relative">
+          <Reveal>
+            <h2 className="font-display text-[clamp(2rem,4vw,3rem)] leading-[1.08] uppercase tracking-wide text-white">
+              {work.sectionConferenceTitle}
+            </h2>
+          </Reveal>
+          <Reveal delayMs={80}>
+            <p className="mt-8 max-w-[42rem] font-body text-[18px] leading-[1.85] text-brand-light/90 md:text-[20px]">
+              {work.sectionConferenceIntro}
+            </p>
+          </Reveal>
+          <div className="relative mt-20 md:mt-24">
+            <StageGallery items={work.stageStills} labels={work.stageGallery} />
+          </div>
+        </div>
+      </div>
+
+      <section
+        className="mx-auto mt-24 max-w-[1140px] border-t border-white/10 px-5 pb-6 pt-14 md:mt-28 md:px-8"
+        aria-labelledby="work-connect-heading"
+      >
+        <h2
+          id="work-connect-heading"
+          className="text-center font-ui text-[11px] font-bold uppercase tracking-[0.22em] text-brand-light/50"
+        >
+          Connect
+        </h2>
+        <ul className="mt-8 flex list-none flex-wrap justify-center gap-x-10 gap-y-5 p-0 text-center md:gap-x-14">
+          {SOCIAL_ORDER.map((id) => (
+            <li key={id}>
               <a
-                href={item.link}
+                href={site.social[id]}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block rounded-xl border border-white/15 border-l-2 border-l-brand-red/75 bg-gradient-to-br from-brand-charcoal/95 via-brand-charcoal/90 to-brand-red/10 p-6 shadow-[0_14px_30px_-18px_rgba(0,0,0,0.52)] transition-all duration-300 ease-premium hover:scale-[1.02] hover:border-brand-red/45 hover:border-l-brand-red"
+                className="group inline-flex flex-col items-center gap-1.5 font-ui text-[14px] text-brand-light/80 transition-colors duration-300 ease-premium hover:text-white"
               >
-                <p className="font-ui text-xs font-bold uppercase tracking-[0.18em] text-brand-red">Watch</p>
-                <h3 className="mt-2 font-display text-[1.5rem] uppercase leading-[1.08] tracking-wide text-white">{item.title}</h3>
-                <p className="mt-3 font-body text-[16px] leading-relaxed text-white">{item.description}</p>
-                <span className="mt-4 inline-flex items-center gap-1 font-ui text-sm font-semibold text-brand-red transition-colors duration-300 ease-premium group-hover:text-white">
-                  <span>{work.watchOnYoutubeLabel}</span>
-                  <span className="transition-transform duration-300 ease-premium group-hover:translate-x-1">→</span>
+                <span className="font-semibold tracking-wide">{site.footer.socialLabels[id]}</span>
+                <span className="text-[13px] font-normal normal-case tracking-normal text-brand-light/45 group-hover:text-brand-light/70">
+                  {site.socialHandles[id]}
                 </span>
               </a>
-            </Reveal>
+            </li>
           ))}
-        </div>
-        <StageGallery items={work.stageStills} labels={work.stageGallery} />
-      </div>
+          <li>
+            <a
+              href={`mailto:${site.email}`}
+              className="group inline-flex flex-col items-center gap-1.5 font-ui text-[14px] text-brand-light/80 transition-colors duration-300 ease-premium hover:text-white"
+            >
+              <span className="font-semibold tracking-wide">Email</span>
+              <span className="text-[13px] font-normal normal-case tracking-normal text-brand-light/45 group-hover:text-brand-light/70">
+                {site.email}
+              </span>
+            </a>
+          </li>
+        </ul>
+      </section>
     </main>
   );
 }

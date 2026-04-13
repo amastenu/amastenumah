@@ -9,10 +9,10 @@ import VideoHero from "../components/VideoHero";
 import { home } from "../content/home";
 
 const btnKeynote =
-  "group inline-flex items-center justify-center gap-2.5 rounded-full bg-brand-red px-8 py-4 font-ui text-base font-semibold uppercase tracking-[0.08em] text-white shadow-cta-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:scale-105 hover:bg-brand-red-dark hover:shadow-cta-glow-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red active:translate-y-px active:scale-[0.98]";
+  "group inline-flex items-center justify-center gap-2.5 rounded-full bg-brand-red px-8 py-4 font-ui text-base font-semibold uppercase tracking-[0.08em] text-white shadow-cta-glow transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-brand-red-dark hover:shadow-[0_10px_30px_rgba(239,68,68,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red active:translate-y-0 active:scale-[0.98]";
 
 const btnFinalCta =
-  "inline-flex items-center justify-center rounded-full bg-brand-red px-10 py-4 font-ui text-lg font-bold uppercase tracking-[0.08em] text-white shadow-cta-glow transition-all duration-400 ease-premium hover:scale-105 hover:bg-brand-red-dark hover:shadow-cta-glow-hover focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red active:scale-95";
+  "inline-flex items-center justify-center rounded-full bg-brand-red px-10 py-4 font-ui text-lg font-bold uppercase tracking-[0.08em] text-white shadow-cta-glow transition-all duration-400 ease-premium hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-brand-red-dark hover:shadow-[0_10px_30px_rgba(239,68,68,0.25)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-red active:scale-[0.98]";
 
 export default function Page() {
   const testimonialTilt = ["rotate-[1.7deg]", "-rotate-[2.1deg]", "rotate-[2deg]", "-rotate-[1.6deg]", "rotate-[1.4deg]"];
@@ -53,14 +53,19 @@ export default function Page() {
 
       <div className="h-20 bg-gradient-to-b from-brand-dark/95 via-brand-charcoal/35 to-brand-light" aria-hidden />
 
-      <SectionWrapper className="relative bg-brand-light">
+      <SectionWrapper
+        className="overflow-hidden bg-brand-light"
+        decoration={
+          <div className="section-noise-soft pointer-events-none absolute inset-0 z-0 opacity-[0.35]" aria-hidden />
+        }
+      >
         <Reveal>
           <div className="text-center">
             <h2 className="font-display text-[clamp(2.25rem,4.4vw,3.7rem)] uppercase leading-[1.06] tracking-wide text-brand-charcoal">{home.testimonialsHeading}</h2>
             <div className="mx-auto mt-3 h-1 w-16 rounded-full bg-brand-red" aria-hidden />
           </div>
         </Reveal>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-10">
           {home.testimonials.map((t, i) => (
             <Reveal
               key={t.name + t.quote}

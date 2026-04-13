@@ -2,8 +2,10 @@
 
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { home } from "../content/home";
+
+const textShadowReadability = "0 2px 20px rgba(0,0,0,0.6)";
 
 export default function VideoHero() {
   const { hero, accessibility } = home;
@@ -11,6 +13,8 @@ export default function VideoHero() {
   const [videoFailed, setVideoFailed] = useState(false);
   const [videoReady, setVideoReady] = useState(false);
   const [heroScrollOpacity, setHeroScrollOpacity] = useState(1);
+  const poster = hero.posterImage ?? hero.fallbackImage;
+
   const headlineLines = useMemo(() => {
     const words = hero.headline.trim().split(/\s+/);
     if (words.length < 4) return [hero.headline];
@@ -18,6 +22,26 @@ export default function VideoHero() {
     return [words.slice(0, midpoint).join(" "), words.slice(midpoint).join(" ")];
   }, [hero.headline]);
   const headlineRevealMs = headlineLines.length * 120 + 220;
+
+  const videoSources = useMemo(() => {
+    const narrow = hero.videoFileNarrow;
+    const webm = hero.videoFileWebm;
+    const mp4 = hero.videoFile;
+    const items = [];
+    if (narrow) {
+      items.push({ key: "mp4-narrow", src: narrow, type: "video/mp4", media: "(max-width: 768px)" });
+    }
+    if (webm) {
+      items.push({
+        key: "webm",
+        src: webm,
+        type: "video/webm",
+        media: narrow ? "(min-width: 769px)" : undefined,
+      });
+    }
+    items.push({ key: "mp4-default", src: mp4, type: "video/mp4", media: undefined });
+    return items;
+  }, [hero.videoFile, hero.videoFileNarrow, hero.videoFileWebm]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -41,97 +65,182 @@ export default function VideoHero() {
     };
   }, []);
 
+  const tryAutoplay = useCallback((el) => {
+    if (!el || videoFailed) return;
+    el.defaultMuted = true;
+    el.muted = true;
+    el.playsInline = true;
+    el.setAttribute("playsinline", "");
+    el.setAttribute("webkit-playsinline", "");
+    void el.play().catch(() => {});
+  }, [videoFailed]);
+
+  /** Cached videos often fire `loadeddata` / `canplay` before React binds props — sync from `readyState` and use native listeners. */
+  const syncVideoLayer = useCallback(
+    (el) => {
+      if (!el || videoFailed) return;
+      if (el.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+        setVideoReady(true);
+      }
+      tryAutoplay(el);
+    },
+    [videoFailed, tryAutoplay]
+  );
+
+  useLayoutEffect(() => {
+    syncVideoLayer(videoRef.current);
+  }, [syncVideoLayer]);
+
   useEffect(() => {
     const el = videoRef.current;
     if (!el || videoFailed) return;
-    const tryPlay = async () => {
-      try {
-        await el.play();
-      } catch {
-        // Some browsers may block autoplay until user interaction.
-      }
+
+    syncVideoLayer(el);
+    const raf = requestAnimationFrame(() => syncVideoLayer(el));
+
+    const onVis = () => {
+      if (document.visibilityState === "visible") syncVideoLayer(el);
     };
-    void tryPlay();
-  }, [videoFailed]);
+    document.addEventListener("visibilitychange", onVis);
+
+    const onBuffered = () => syncVideoLayer(el);
+    el.addEventListener("loadeddata", onBuffered);
+    el.addEventListener("canplay", onBuffered);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("visibilitychange", onVis);
+      el.removeEventListener("loadeddata", onBuffered);
+      el.removeEventListener("canplay", onBuffered);
+    };
+  }, [videoFailed, syncVideoLayer]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-brand-dark opacity-0 animate-hero-shell motion-reduce:opacity-100 motion-reduce:animate-none">
-      <div className="absolute inset-0 overflow-hidden">
-        {!videoReady || videoFailed ? (
-          <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 min-h-[100vh] w-full overflow-hidden">
+        {videoFailed ? (
+          <div className="absolute inset-0 z-0 min-h-[100vh]">
             <Image
               src={hero.fallbackImage}
               alt=""
-              width={1920}
-              height={1080}
-              className="h-full w-full object-cover"
+              fill
               priority
               unoptimized
-              style={{ maxWidth: "100%" }}
+              className="object-cover object-center"
+              sizes="100vw"
             />
           </div>
-        ) : null}
-        {!videoFailed ? (
-          <video
-            ref={videoRef}
-            className={`absolute inset-0 z-0 h-full w-full origin-center object-cover brightness-[0.74] contrast-110 transition-opacity duration-700 ease-premium will-change-transform motion-reduce:animate-none ${
-              videoReady ? "animate-hero-kenburns opacity-[0.62]" : "opacity-0"
-            }`}
-            poster={hero.fallbackImage}
-            preload="auto"
-            playsInline
-            muted
-            loop
-            autoPlay
-            aria-label={accessibility.heroVideoLabel}
-            onLoadedData={() => {
-              setVideoReady(true);
-              videoRef.current?.play().catch(() => {});
-            }}
-            onCanPlay={() => {
-              setVideoReady(true);
-              videoRef.current?.play().catch(() => {});
-            }}
-            onError={() => setVideoFailed(true)}
-          >
-            <source src={hero.videoFile} type="video/mp4" />
-          </video>
-        ) : null}
+        ) : (
+          <>
+            {!videoReady ? (
+              <div className="absolute inset-0 z-0 min-h-[100vh]">
+                <Image
+                  src={poster}
+                  alt=""
+                  fill
+                  priority
+                  unoptimized
+                  className="object-cover object-center"
+                  sizes="100vw"
+                />
+              </div>
+            ) : null}
+            <div
+              className={`absolute inset-0 z-0 min-h-[100vh] w-full transition-opacity duration-700 ease-premium ${
+                videoReady ? "opacity-100" : "pointer-events-none opacity-0"
+              }`}
+            >
+              <div className="relative min-h-[100vh] h-full w-full overflow-hidden motion-reduce:animate-none animate-hero-bg-drift">
+                <video
+                  ref={videoRef}
+                  className="absolute inset-0 z-0 h-full min-h-[100vh] w-full object-cover brightness-[0.78] contrast-[1.06] will-change-transform"
+                  poster={poster}
+                  preload="auto"
+                  playsInline
+                  muted
+                  loop
+                  autoPlay
+                  aria-label={accessibility.heroVideoLabel}
+                  onLoadedMetadata={(e) => tryAutoplay(e.currentTarget)}
+                  onLoadedData={(e) => syncVideoLayer(e.currentTarget)}
+                  onCanPlay={(e) => syncVideoLayer(e.currentTarget)}
+                  onError={() => setVideoFailed(true)}
+                >
+                  {videoSources.map(({ key, src, type, media }) => (
+                    <source key={key} src={src} type={type} {...(media ? { media } : {})} />
+                  ))}
+                </video>
+              </div>
+            </div>
+          </>
+        )}
+
+        {/* Subtle radial red glow — center weight */}
         <div
-          className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-t from-black/58 via-black/34 to-transparent"
+          className="pointer-events-none absolute inset-0 z-[1] min-h-[100vh] bg-[radial-gradient(ellipse_at_50%_42%,rgba(211,47,47,0.14)_0%,transparent_52%)]"
           aria-hidden
         />
-        <div className="pointer-events-none absolute inset-0 z-[2] bg-black/8" aria-hidden />
-        <div className="pointer-events-none absolute inset-0 z-[2] bg-brand-red/4" aria-hidden />
-        <div className="noise-layer z-[2]" aria-hidden />
+
+        {/* Top lighter → bottom deep black */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[1] min-h-[100vh] bg-gradient-to-b from-white/[0.06] via-transparent to-black/[0.92]"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute inset-0 z-[1] min-h-[100vh] bg-gradient-to-t from-black/[0.88] via-black/[0.45] to-transparent"
+          aria-hidden
+        />
+        <div className="pointer-events-none absolute inset-0 z-[1] min-h-[100vh] bg-black/10" aria-hidden />
+
+        <div className="noise-layer noise-layer--hero-base z-[2] min-h-[100vh]" aria-hidden />
+        <div className="noise-layer--hero-fine z-[2] min-h-[100vh]" aria-hidden />
       </div>
 
-      <div className="relative z-[3] flex min-h-screen flex-col justify-end pb-24 pt-32 md:pb-36 md:pt-36" style={{ opacity: heroScrollOpacity }}>
+      <div
+        className="relative z-[3] flex min-h-screen flex-col justify-end pb-24 pt-32 md:pb-36 md:pt-36"
+        style={{ opacity: heroScrollOpacity }}
+      >
         <div className="mx-auto w-full max-w-6xl px-6 pb-10">
           <div className="max-w-[min(100%,36rem)] text-left md:max-w-3xl">
             <div className="flex flex-col space-y-6">
-              <h1
-                className="relative z-10 font-display text-6xl font-semibold uppercase leading-[0.92] tracking-widest text-white [text-shadow:0_2px_16px_rgba(0,0,0,0.62)] md:text-8xl"
-              >
+              <h1 className="relative z-10 font-display text-6xl font-semibold uppercase leading-[0.92] tracking-widest text-white md:text-8xl">
                 {headlineLines.map((line, index) => (
                   <span
                     key={`${line}-${index}`}
                     className="block opacity-0 animate-fade-up motion-reduce:opacity-100 motion-reduce:animate-none"
-                    style={{ animationDelay: `${index * 120}ms` }}
+                    style={{
+                      animationDelay: `${index * 120}ms`,
+                      textShadow: textShadowReadability,
+                    }}
                   >
-                    {line}
+                    <span
+                      className="inline-block motion-reduce:animate-none animate-hero-headline-glitch"
+                      style={{
+                        animationDelay: `${index * 120}ms`,
+                        textShadow: textShadowReadability,
+                      }}
+                    >
+                      {line}
+                    </span>
                   </span>
                 ))}
               </h1>
               <p
-                className="font-display text-3xl font-normal uppercase leading-tight tracking-widest text-brand-red opacity-0 [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] motion-reduce:opacity-100 motion-reduce:animate-none md:text-4xl"
-                style={{ animation: "fade-up 0.8s ease-out 200ms forwards, red-flicker 3.6s ease-in-out 1150ms infinite" }}
+                className="video-hero-subheadline font-display text-3xl font-normal uppercase leading-tight tracking-widest text-brand-red md:text-4xl"
+                style={{
+                  textShadow: textShadowReadability,
+                  animation:
+                    "fade-up 0.8s ease-out 200ms forwards, red-flicker 6.5s ease-in-out 1150ms infinite",
+                }}
               >
                 {hero.subheadline}
               </p>
               <p
-                className="max-w-xl font-body text-lg leading-relaxed text-white opacity-0 [text-shadow:0_2px_30px_rgba(0,0,0,0.5)] animate-fade-up md:text-xl md:leading-relaxed"
-                style={{ animationDelay: `${headlineRevealMs + 320}ms` }}
+                className="max-w-xl font-body text-lg leading-relaxed text-white opacity-0 animate-fade-up md:text-xl md:leading-relaxed"
+                style={{
+                  textShadow: textShadowReadability,
+                  animationDelay: `${headlineRevealMs + 320}ms`,
+                }}
               >
                 {hero.subtext}
               </p>

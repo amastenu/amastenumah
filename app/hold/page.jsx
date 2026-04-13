@@ -54,24 +54,9 @@ export default function Page() {
             ))}
           </div>
           <Reveal delayMs={220}>
-            <p className="mt-20 max-w-[32rem] whitespace-normal break-words font-display text-[clamp(2rem,4.2vw,3rem)] uppercase leading-[1.16] tracking-[0.055em] text-brand-red [text-shadow:0_8px_24px_rgba(0,0,0,0.35)]">
+            <p className="mt-20 max-w-[32rem] whitespace-normal break-words font-display text-[clamp(2rem,4.2vw,3rem)] uppercase leading-[1.3] tracking-[0.05em] text-brand-red [text-shadow:0_8px_24px_rgba(0,0,0,0.35)]">
               {hold.thesis}
             </p>
-          </Reveal>
-          <Reveal delayMs={320}>
-            <div className="mt-12 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
-              {hold.buyLinks.map((b) => (
-                <a
-                  key={b.href}
-                  href={b.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center rounded-full bg-brand-red px-8 py-3 font-ui text-[13px] font-bold uppercase tracking-[0.08em] text-white shadow-[0_10px_24px_-14px_rgba(0,0,0,0.6)] transition-all duration-300 ease-premium hover:scale-105 hover:bg-brand-red-dark hover:shadow-[0_12px_28px_-14px_rgba(211,47,47,0.45)] active:scale-[0.98]"
-                >
-                  {b.label}
-                </a>
-              ))}
-            </div>
           </Reveal>
         </div>
       </div>
@@ -79,11 +64,67 @@ export default function Page() {
       <div className="mx-auto mt-24 max-w-[1140px] space-y-16 px-5 md:px-8">
         {hold.pullQuotes.map((q, i) => (
           <Reveal key={q} delayMs={i * 120}>
-            <blockquote className="border-l-[5px] border-brand-red py-3 pl-9 font-display text-[clamp(1.8rem,4vw,2.75rem)] uppercase leading-[1.1] tracking-wide text-white">
+            <blockquote className="border-l-[5px] border-brand-red py-3 pl-9 font-body text-[clamp(1.2rem,2.8vw,1.65rem)] font-medium leading-[1.45] text-white/95 md:text-[clamp(1.25rem,2.4vw,1.5rem)] md:leading-[1.5]">
               {q}
             </blockquote>
           </Reveal>
         ))}
+      </div>
+
+      <div className="mx-auto mt-20 max-w-[1140px] px-5 md:mt-28 md:px-8">
+        <Reveal>
+          <h2 className="text-center font-display text-[clamp(1.5rem,3.2vw,2.25rem)] uppercase tracking-[0.12em] text-brand-light/90">
+            {hold.pressQuotesHeading}
+          </h2>
+        </Reveal>
+        <ul className="mx-auto mt-12 max-w-[52rem] list-none space-y-10 p-0 text-left">
+          {hold.pressQuotes.map((item, i) => (
+            <li key={i}>
+              <Reveal delayMs={i * 80}>
+                <blockquote className="border-l-[4px] border-brand-red/55 py-1 pl-6 md:pl-8">
+                  <p className="font-body text-[17px] leading-[1.75] text-white/95 md:text-[18px] md:leading-[1.8]">{item.quote}</p>
+                  <p className="mt-3 font-ui text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-light/55">{item.attribution}</p>
+                </blockquote>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+        <Reveal delayMs={120}>
+          <blockquote className="mx-auto mt-14 max-w-[52rem] border-t border-white/[0.08] pt-12 text-center">
+            <p className="mx-auto max-w-[48rem] font-body text-[17px] leading-[1.75] text-brand-light/90 md:text-[18px] md:leading-[1.82]">
+              {hold.credibilityQuote.quote}
+            </p>
+            <p className="mt-4 font-ui text-[12px] font-semibold uppercase tracking-[0.14em] text-brand-light/50">{hold.credibilityQuote.attribution}</p>
+          </blockquote>
+        </Reveal>
+      </div>
+
+      <div className="mx-auto mt-16 max-w-[1140px] px-5 md:mt-20 md:px-8">
+        <Reveal delayMs={80}>
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap">
+            {hold.buyLinks.map((b) => (
+              <a
+                key={b.href}
+                href={b.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full bg-brand-red px-8 py-3 font-ui text-[13px] font-bold uppercase tracking-[0.08em] text-white shadow-[0_10px_24px_-14px_rgba(0,0,0,0.6)] transition-all duration-300 ease-premium hover:-translate-y-0.5 hover:scale-[1.02] hover:bg-brand-red-dark hover:shadow-[0_10px_30px_rgba(239,68,68,0.25)] active:translate-y-0 active:scale-[0.98]"
+              >
+                {b.label}
+              </a>
+            ))}
+          </div>
+        </Reveal>
+        <Reveal delayMs={160}>
+          <div className="mx-auto mt-8 max-w-lg text-center">
+            <a
+              href={`mailto:${hold.signedCopy.email}`}
+              className="font-body text-[15px] leading-relaxed text-brand-light/75 underline decoration-brand-light/30 underline-offset-[5px] transition-colors duration-300 ease-premium hover:text-white hover:decoration-white/50"
+            >
+              {hold.signedCopy.line}
+            </a>
+          </div>
+        </Reveal>
       </div>
     </main>
   );

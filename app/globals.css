@@ -19,8 +19,51 @@ html {
   background-size: 4px 4px, 7px 7px;
 }
 
+/* Hero: extra-fine grain + slightly stronger base film grain (premium, still subtle) */
+.noise-layer--hero-base {
+  opacity: 0.09;
+}
+.noise-layer--hero-fine {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.045;
+  mix-blend-mode: overlay;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.18) 1px, transparent 0);
+  background-size: 2px 2px;
+}
+
+/* Dark sections — optional extra grain (opacity set per usage) */
+.section-noise-soft {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.055;
+  mix-blend-mode: soft-light;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.35) 1px, transparent 0),
+    radial-gradient(circle at 4px 4px, rgba(255, 255, 255, 0.12) 1px, transparent 0);
+  background-size: 5px 5px, 9px 9px;
+}
+
+/* Premium link: gradient underline grows L → R */
+.link-gradient-underline {
+  background-image: linear-gradient(90deg, #d32f2f, #ff6b6b);
+  background-repeat: no-repeat;
+  background-position: left 100%;
+  background-size: 0% 2px;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.link-gradient-underline:hover {
+  background-size: 100% 2px;
+}
+
 /* Hero entrance animations: keep copy visible when user prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  .video-hero-subheadline {
+    animation: none !important;
+    opacity: 1 !important;
+  }
   html {
     scroll-behavior: auto;
   }
@@ -40,6 +83,9 @@ html {
     animation: none !important;
   }
   .animate-hero-kenburns,
+  .animate-hero-bg-drift,
+  .animate-hero-headline-glitch,
+  .animate-play-pulse-soft,
   .animate-hero-shell,
   .animate-scroll-hint,
   .animate-scroll-bounce-soft,
