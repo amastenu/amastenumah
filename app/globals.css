@@ -21,7 +21,7 @@ html {
 
 /* Hero: extra-fine grain + slightly stronger base film grain (premium, still subtle) */
 .noise-layer--hero-base {
-  opacity: 0.09;
+  opacity: 0.08;
 }
 .noise-layer--hero-fine {
   pointer-events: none;
