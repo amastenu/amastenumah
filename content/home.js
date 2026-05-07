@@ -74,7 +74,7 @@ export const home = {
       "I started as a service worker. Became a service executive. Then a consultant hired by the companies I used to criticize.",
       "I built the phone systems designed to keep you from talking to a human. I know what the brief said. It wasn't \"help the customer.\" It was \"reduce handle time.\"",
       "I've spent 25 years watching this industry lie to itself. Four books. Hundreds of stages. Dozens of countries. And one conclusion that hasn't changed:",
-      "Bad customer service is not an accident. It's a business model.",
+      "Bad customer service is not an accident. It's a business model!",
       "My name is Amas Tenumah. I'm the person you call when you're ready to stop pretending.",
     ],
     photoFile: "/images/amas-about-sch-pic.webp",
