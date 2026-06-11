@@ -6,16 +6,20 @@ import { Resend } from "resend";
  * `emails.send({ ... })` payload as the brief and only runs on request.
  */
 export async function POST(request) {
-  const { name, org, eventType, message } = await request.json();
+  try {
+    const { name, org, eventType, message } = await request.json();
 
-  const resend = new Resend(process.env.RESEND_API_KEY);
+    const resend = new Resend(process.env.RESEND_API_KEY);
 
-  await resend.emails.send({
-    from: "site@amastenumah.com",
-    to: "amas@amastenumah.com",
-    subject: `New inquiry from ${name} — ${org}`,
-    text: `Name: ${name}\nOrg: ${org}\nEvent: ${eventType}\nMessage: ${message}`,
-  });
+    await resend.emails.send({
+      from: "site@amastenumah.com",
+      to: "amas@amastenumah.com",
+      subject: `New inquiry from ${name} — ${org}`,
+      text: `Name: ${name}\nOrg: ${org}\nEvent: ${eventType}\nMessage: ${message}`,
+    });
 
-  return Response.json({ success: true });
+    return Response.json({ success: true });
+  } catch (error) {
+    return Response.json({ success: false, error: error.message }, { status: 500 });
+  }
 }
