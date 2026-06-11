@@ -1,8 +1,11 @@
 import { Resend } from "resend";
 
 export async function POST(request) {
+  console.log("CASE API HIT");
   try {
-    const { name, email, company, whatTheyDid } = await request.json();
+    const body = await request.json();
+    console.log("Parsed body:", body);
+    const { name, email, company, whatTheyDid } = body;
     const resend = new Resend(process.env.RESEND_API_KEY);
     await resend.emails.send({
       from: "site@amastenumah.com",
